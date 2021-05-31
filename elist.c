@@ -128,6 +128,19 @@ size_t elist_size(struct elist *list)
 
 int elist_remove(struct elist *list, size_t idx)
 {
+    if (list == NULL) {
+        return -1;
+    } else {
+        if (!idx_is_valid(list, idx)) {
+            return -1;
+        } else {
+            memmove(list->element_storage + list->item_sz * (idx - 1),
+                    list->element_storage + list->item_sz * idx,
+                    (list->size - idx) * list->item_sz);
+            return 0;
+        }
+    }
+
     return -1;
 }
 
