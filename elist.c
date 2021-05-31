@@ -24,7 +24,7 @@ struct elist *elist_create(size_t list_sz, size_t item_sz)
     res->capacity = list_sz;
     res->size = 0;
     res->item_sz = item_sz;
-    res->element_storage = (struct elist*) malloc (res->capacity * res->item_sz);
+    res->element_storage = (void*) malloc (res->capacity * res->item_sz);
     return res;
 }
 
@@ -40,7 +40,7 @@ int elist_set_capacity(struct elist *list, size_t capacity)
         return -1;
     } else {
         list->capacity = capacity;
-        list->element_storage = (struct elist*) realloc (list->element_storage, list->capacity * list->item_sz);
+        list->element_storage = (void*) realloc (list->element_storage, list->capacity * list->item_sz);
         return 0;
     }
 }
@@ -56,7 +56,15 @@ size_t elist_capacity(struct elist *list)
 
 ssize_t elist_add(struct elist *list, void *item)
 {
-    return -1;
+    if (list == NULL) {
+        return -1;
+    } else {
+        if (list->capacity == list->size) {
+            elist_set_capacity(list, 2 * list->capacity);
+        }
+        memcpy(list->element_storage + list->size * list->item_sz, item, list->item_sz);
+        return 0;
+    }
 }
 
 void *elist_add_new(struct elist *list)
