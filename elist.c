@@ -119,7 +119,11 @@ void *elist_get(struct elist *list, size_t idx)
 
 size_t elist_size(struct elist *list)
 {
-    return 0;
+    if (list == NULL) {
+        return -1;
+    } else {
+        return list->size;
+    }
 }
 
 int elist_remove(struct elist *list, size_t idx)
