@@ -77,7 +77,7 @@ ssize_t elist_add(struct elist *list, void *item)
 void *elist_add_new(struct elist *list)
 {
     if (list == NULL) {
-        return -1;
+
     } else {
         if (list->size == list->capacity) {
             elist_set_capacity(list, 2 * list->capacity);
@@ -105,10 +105,10 @@ int elist_set(struct elist *list, size_t idx, void *item)
 void *elist_get(struct elist *list, size_t idx)
 {
     if (list == NULL) {
-        return -1;
+
     } else {
         if (!idx_is_valid(list, idx)) {
-            return -1;
+
         } else {
             void* res = (char*) list->element_storage + list->item_sz * (idx - 1);
             return res;
@@ -228,5 +228,15 @@ bool idx_is_valid(struct elist *list, size_t idx)
         }
     }
     return false;
+}
+
+int main(void) {
+    struct elist* list = elist_create(10,4);
+    int* one;
+    *one = 1;
+    elist_add(list, one);
+    elist_remove(list,0);
+
+
 }
 
