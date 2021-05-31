@@ -93,7 +93,7 @@ int elist_set(struct elist *list, size_t idx, void *item)
     if (list == NULL) {
         return -1;
     } else {
-        if (idx > list->size) {
+        if (!idx_is_valid(list, idx)) {
             return -1;
         } else {
             memcpy(list->element_storage + list->item_sz * (idx - 1), item, list->item_sz);
@@ -104,7 +104,17 @@ int elist_set(struct elist *list, size_t idx, void *item)
 
 void *elist_get(struct elist *list, size_t idx)
 {
-    return NULL;
+    if (list == NULL) {
+        return -1;
+    } else {
+        if (!idx_is_valid(list, idx)) {
+            return -1;
+        } else {
+            void* res = (char*) list->element_storage + list->item_sz * (idx - 1);
+            return res;
+        }
+
+    }
 }
 
 size_t elist_size(struct elist *list)
@@ -139,6 +149,15 @@ void elist_sort(struct elist *list, int (*comparator)(const void *, const void *
 
 bool idx_is_valid(struct elist *list, size_t idx)
 {
+    if (list == NULL) {
+        return false;
+    } else {
+        if (idx > list->size) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     return false;
 }
 
