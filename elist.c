@@ -20,17 +20,29 @@ bool idx_is_valid(struct elist *list, size_t idx);
 
 struct elist *elist_create(size_t list_sz, size_t item_sz)
 {
-    return NULL;
+    struct elist *res = NULL;
+    res->capacity = list_sz;
+    res->size = 0;
+    res->item_sz = item_sz;
+    res->element_storage = (struct elist*) malloc (res->capacity * res->item_sz);
+    return res;
 }
 
 void elist_destroy(struct elist *list)
 {
-
+    free(list->element_storage);
+    free(list);
 }
 
 int elist_set_capacity(struct elist *list, size_t capacity)
 {
-    return -1;
+    if (capacity < list->size) {
+        return -1;
+    } else {
+        list->capacity = capacity;
+        list->element_storage = (struct elist*) realloc (list->element_storage, list->capacity * list->item_sz);
+        return 0;
+    }
 }
 
 size_t elist_capacity(struct elist *list)
