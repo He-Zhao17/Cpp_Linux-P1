@@ -90,7 +90,16 @@ void *elist_add_new(struct elist *list)
 
 int elist_set(struct elist *list, size_t idx, void *item)
 {
-    return -1;
+    if (list == NULL) {
+        return -1;
+    } else {
+        if (idx > list->size) {
+            return -1;
+        } else {
+            memcpy(list->element_storage + list->item_sz * (idx - 1), item, list->item_sz);
+            return 0;
+        }
+    }
 }
 
 void *elist_get(struct elist *list, size_t idx)
