@@ -151,11 +151,9 @@ void elist_clear(struct elist *list)
         return;
     } else {
         if (list->size == 0) {
-            list->element_storage = (void*) calloc(list->capacity, list->item_sz);
             return;
         } else {
             list->size = 0;
-            list->element_storage = (void*) calloc(list->capacity, list->item_sz);
             return;
         }
     }
