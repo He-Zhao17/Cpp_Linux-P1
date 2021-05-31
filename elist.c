@@ -20,7 +20,7 @@ bool idx_is_valid(struct elist *list, size_t idx);
 
 struct elist *elist_create(size_t list_sz, size_t item_sz)
 {
-    struct elist *res = NULL;
+    struct elist *res = (struct elist*) calloc (1, sizeof (struct elist));
     res->capacity = list_sz;
     res->size = 0;
     res->item_sz = item_sz;
@@ -105,15 +105,14 @@ int elist_set(struct elist *list, size_t idx, void *item)
 void *elist_get(struct elist *list, size_t idx)
 {
     if (list == NULL) {
-
+        return NULL;
     } else {
         if (!idx_is_valid(list, idx)) {
-
+            return NULL;
         } else {
             void* res = (char*) list->element_storage + list->item_sz * (idx - 1);
             return res;
         }
-
     }
 }
 
@@ -211,6 +210,7 @@ void elist_sort(struct elist *list, int (*comparator)(const void *, const void *
         memcpy(temp, list->element_storage, list->size * list->item_sz);
         qsort(temp, list->size, list->item_sz, (*comparator));
         memcpy(list->element_storage, temp, list->size * list->item_sz);
+        free(temp);
         return;
     }
 
@@ -232,7 +232,7 @@ bool idx_is_valid(struct elist *list, size_t idx)
 
 int main(void) {
     struct elist* list = elist_create(10,4);
-    int* one;
+    int* one = (int*) calloc (1, sizeof(int));
     *one = 1;
     elist_add(list, one);
     elist_remove(list,0);
