@@ -165,6 +165,18 @@ void elist_clear(struct elist *list)
 
 void elist_clear_mem(struct elist *list)
 {
+    if (list == NULL) {
+        return;
+    } else {
+        if (list->size == 0) {
+            list->element_storage = (void*) calloc(list->capacity, list->item_sz);
+            return;
+        } else {
+            list->size = 0;
+            list->element_storage = (void*) calloc(list->capacity, list->item_sz);
+            return;
+        }
+    }
 
 }
 
