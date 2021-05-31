@@ -180,6 +180,24 @@ void elist_clear_mem(struct elist *list)
 
 ssize_t elist_index_of(struct elist *list, void *item)
 {
+    if (list == NULL) {
+        return -1;
+    } else {
+        if (list->size == 0) {
+            return -1;
+        } else {
+            for (int i = 0; i < list->size - 1; i++) {
+                int temp = memcmp(list->element_storage + i * list->item_sz, item, list->item_sz);
+                if (temp == 0) {
+                    return i + 1;
+                }
+            }
+            return -1;
+
+        }
+
+    }
+
     return -1;
 }
 
