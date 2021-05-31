@@ -137,6 +137,7 @@ int elist_remove(struct elist *list, size_t idx)
             memmove(list->element_storage + list->item_sz * (idx - 1),
                     list->element_storage + list->item_sz * idx,
                     (list->size - idx) * list->item_sz);
+            list->size--;
             return 0;
         }
     }
@@ -146,6 +147,19 @@ int elist_remove(struct elist *list, size_t idx)
 
 void elist_clear(struct elist *list)
 {
+    if (list == NULL) {
+        return;
+    } else {
+        if (list->size == 0) {
+            list->element_storage = (void*) calloc(list->capacity, list->item_sz);
+            return;
+        } else {
+            list->size = 0;
+            list->element_storage = (void*) calloc(list->capacity, list->item_sz);
+            return;
+        }
+    }
+
 
 }
 
