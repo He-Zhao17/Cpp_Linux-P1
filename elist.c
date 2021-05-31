@@ -204,6 +204,16 @@ ssize_t elist_index_of(struct elist *list, void *item)
 void elist_sort(struct elist *list, int (*comparator)(const void *, const void *))
 {
 
+    if (list == NULL) {
+        return;
+    } else {
+        void* temp = (void*) calloc(list->size, list->item_sz);
+        memcpy(temp, list->element_storage, list->size * list->item_sz);
+        qsort(temp, list->size, list->item_sz, (*comparator));
+        memcpy(list->element_storage, temp, list->size * list->item_sz);
+        return;
+    }
+
 }
 
 bool idx_is_valid(struct elist *list, size_t idx)
