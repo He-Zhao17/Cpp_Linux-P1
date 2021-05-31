@@ -230,13 +230,4 @@ bool idx_is_valid(struct elist *list, size_t idx)
     return false;
 }
 
-int main(void) {
-    struct elist* list = elist_create(10,4);
-    int* one = (int*) calloc (1, sizeof(int));
-    *one = 1;
-    elist_add(list, one);
-    elist_remove(list,0);
-
-
-}
 
