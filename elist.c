@@ -47,7 +47,11 @@ int elist_set_capacity(struct elist *list, size_t capacity)
 
 size_t elist_capacity(struct elist *list)
 {
-    return 0;
+    if (list == NULL) {
+        return -1;
+    } else {
+        return list->capacity;
+    }
 }
 
 ssize_t elist_add(struct elist *list, void *item)
