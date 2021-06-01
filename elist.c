@@ -229,5 +229,3 @@ bool idx_is_valid(struct elist *list, size_t idx)
     }
     return false;
 }
-
-

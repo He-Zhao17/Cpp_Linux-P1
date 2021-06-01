@@ -3,11 +3,56 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include "elist.h"
 
 #include "logger.h"
 
+#define __MAX = 256
+
 /* Forward declarations: */
 void print_usage(char *argv[]);
+
+struct f{
+    unsigned long size;
+    char* path;
+    time_t accTime;
+};
+
+
+
+void tDir(struct elist* list, char* path) {
+
+    DIR *dir = NULL;
+    struct dirent *currentDir = NULL;
+
+    char p[256];
+
+    dir = opendir(path);
+
+    // loop
+    while ( (currentDir = readdir(dir)) != NULL) {
+        // remove read finish
+        if ( (!strncmp(currentDir->d_name, ".", 1)) || (!strncmp(currentDir->d_name, "..", 2)) ) {
+            continue;
+        }
+        snprintf(p, sizeof(p) - 1, "%s/%s", path, currentDir->d_name);
+        struct stat info;
+        stat(p, &info);
+        time_t tempT = info.st_atimespec.tv_sec;
+        struct f temp = {info.st_size, p, tempT};
+        if (S_ISDIR(info.st_mode)) {
+            tDir(list, p);
+        } else {
+            elist_add(list, &temp);
+        }
+    }
+    closedir(dir);
+}
 
 
 void print_usage(char *argv[]) {
@@ -98,6 +143,26 @@ int main(int argc, char *argv[])
      *  - sort the list (either by size or time)
      *  - print formatted list
      */
+    DIR *dir = opendir(options.directory);
+    if (dir == NULL) {
+        printf("Error: No such file or path.");
+        return 0;
+    } else {
+        struct elist* list = elist_create(10, sizeof(struct f));
+        tDir(list, options.directory);
+        unsigned short cols = 80;
+        struct winsize win_sz;
+        if (ioctl(fileno(stdout), TIOCGWINSZ, &win_sz) != -1) {
+            cols = win_sz.ws_col;
+        }
+        LOG("Display columns: %d\n", cols);
+
+
+
+
+    }
+
+
 
     return 0;
 }
