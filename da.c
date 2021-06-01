@@ -13,11 +13,24 @@
 
 #include "logger.h"
 
+/**
+* Default max size of the path length.
+*/
 #define __MAX = 256
 
 /* Forward declarations: */
+
+/**
+* @brief		The function to get the tips.
+* @details	    The function to get the tips.
+* @param[in]	argv The command line in.
+* @return	   None.
+*/
 void print_usage(char *argv[]);
 
+/**
+* The struct of the element in elist about documents.
+*/
 struct f{
     unsigned long size;
     char* path;
@@ -25,7 +38,13 @@ struct f{
 };
 
 
-
+/**
+* @brief		To traverse a path and write into a elist.
+* @details	    To traverse a path and write into a elist recursively.
+* @param[in]	list The elist we want to write into.
+* @param[in]    path The path we want to traverse.
+* @return       None.
+*/
 void tDir(struct elist* list, char* path) {
 
     DIR *dir = NULL;
@@ -55,18 +74,38 @@ void tDir(struct elist* list, char* path) {
     closedir(dir);
 }
 
+/**
+* @brief		The comparator function to sort with last accessed time.
+* @details	    The comparator function to sort with last accessed time.
+* @param[in]	a First argument.
+* @param[in]    b Second argument.
+* @return       If b is after a, return -1, if b and a is equivalent, return 0, else return 1.
+*/
 int cmptf(const void *a, const void *b) {
     struct f* sa = (struct f*) a;
     struct f* sb = (struct f*) b;
     return sb->accTime - sa->accTime;
 }
 
+/**
+* @brief		The comparator function to sort with last accessed size.
+* @details	    The comparator function to sort with last accessed size.
+* @param[in]	a First argument.
+* @param[in]    b Second argument.
+* @return       If b is after a, return -1, if b and a is equivalent, return 0, else return 1.
+*/
 int cmpsf(const void *a, const void *b) {
     struct f* sa = (struct f*) a;
     struct f* sb = (struct f*) b;
     return sb->size - sa->size;
 }
 
+/**
+* @brief		The function to get the tips.
+* @details	    The function to get the tips.
+* @param[in]	argv The command line in.
+* @return	   None.
+*/
 void print_usage(char *argv[]) {
 fprintf(stderr, "Disk Analyzer (da): analyzes disk space usage\n");
 fprintf(stderr, "Usage: %s [-ahs] [-l limit] [directory]\n\n", argv[0]);
@@ -192,8 +231,5 @@ int main(int argc, char *argv[])
             fprintf(stderr, "%s%s%s", p, s, at);
         }
     }
-
-
-
     return 0;
 }

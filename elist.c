@@ -6,9 +6,19 @@
 
 #include "elist.h"
 
+/**
+* Default init size of the elist.
+*/
 #define DEFAULT_INIT_SZ 10
+
+/**
+* Times multiplied when extend the elist.
+*/
 #define RESIZE_MULTIPLIER 2
 
+/**
+* The declaration of elist.
+*/
 struct elist {
     size_t capacity;         /*!< Storage space allocated for list items */
     size_t size;             /*!< The actual number of items in the list */
@@ -92,7 +102,6 @@ int elist_set_capacity(struct elist *list, size_t capacity)
  * @brief		To get the capacity of the elist.
  * @details	    To get the capacity of the elist.
  * @param[in]	list The elist whose capacity we want to get.
- * @param[in]	capacity The capacity we want to reset.
  * @return	    If success return the capacity, else return -1.
  */
 size_t elist_capacity(struct elist *list)
@@ -104,6 +113,13 @@ size_t elist_capacity(struct elist *list)
     }
 }
 
+/**
+* @brief		Add the element into the elist.
+* @details	    Add the element into the elist.
+* @param[in]	list The elist we want to add into.
+* @param[in]	item The element we want to add.
+* @return	    If success return 0, else return -1.
+*/
 ssize_t elist_add(struct elist *list, void *item)
 {
     if (list == NULL) {
@@ -118,6 +134,12 @@ ssize_t elist_add(struct elist *list, void *item)
     }
 }
 
+/**
+* @brief		To add and get the pointer of the new element.
+* @details	    To add and get the pointer of the new element.
+* @param[in]	list The elist we want to add into.
+* @return	    The pointer of the new element.
+*/
 void *elist_add_new(struct elist *list)
 {
     if (list->size == list->capacity) {
@@ -127,6 +149,14 @@ void *elist_add_new(struct elist *list)
     return list->element_storage + (list->size - 1) * list->item_sz;
 }
 
+/**
+* @brief		To reset a element of the elist.
+* @details	    To reset a element of the elist with index.
+* @param[in]	list The elist we want to modify.
+* @param[in]	idx The index of the element we want to modify.
+* @param[in]    item The new content for the element.
+* @return	    If success return 0, else return -1.
+*/
 int elist_set(struct elist *list, size_t idx, void *item)
 {
     if (list == NULL) {
@@ -141,6 +171,13 @@ int elist_set(struct elist *list, size_t idx, void *item)
     }
 }
 
+/**
+* @brief		To get a element of the elist.
+* @details	    To get a element of the elist. with index.
+* @param[in]	list The elist we want to get from.
+* @param[in]	idx The index of the element we want to get.
+* @return	    If success return the pointer of the element, else return NULL.
+*/
 void *elist_get(struct elist *list, size_t idx)
 {
     if (list == NULL) {
@@ -155,6 +192,12 @@ void *elist_get(struct elist *list, size_t idx)
     }
 }
 
+/**
+* @brief		To get the actual size of the elist.
+* @details	    To get the actual size of the elist.
+* @param[in]	list The elist whose actual size we want to get.
+* @return	    If success return the actual size of the elist, else return -1.
+*/
 size_t elist_size(struct elist *list)
 {
     if (list == NULL) {
@@ -164,6 +207,13 @@ size_t elist_size(struct elist *list)
     }
 }
 
+/**
+* @brief		To remove a element.
+* @details	    To remove a element with index.
+* @param[in]	list The elist whose actual size we want to remove from.
+* @param[in]    idx The index of the element we want to remove from the elist.
+* @return	    If success return 0, else return -1.
+*/
 int elist_remove(struct elist *list, size_t idx)
 {
     if (list == NULL) {
@@ -186,6 +236,12 @@ int elist_remove(struct elist *list, size_t idx)
     return -1;
 }
 
+/**
+* @brief		To clear the elist.
+* @details	    To clear the elist.
+* @param[in]	list The elist whose actual size we want to clear.
+* @return	    None.
+*/
 void elist_clear(struct elist *list)
 {
     if (list == NULL) {
@@ -202,6 +258,12 @@ void elist_clear(struct elist *list)
 
 }
 
+/**
+* @brief		To clear the elist and clear the memory.
+* @details	    To clear the elist and clear the memory.
+* @param[in]	list The elist whose actual size we want to clear.
+* @return	    None.
+*/
 void elist_clear_mem(struct elist *list)
 {
     if (list == NULL) {
@@ -219,6 +281,13 @@ void elist_clear_mem(struct elist *list)
 
 }
 
+/**
+* @brief		To get the index with the content of the element.
+* @details	    To get the index with the content of the element. If there are 2 elements having this content, choose the first. etc.
+* @param[in]	list The elist whose actual size we want to find from.
+* @param[in]    item The content of the element.
+* @return	    If success return the index of the element, else return -1.
+*/
 ssize_t elist_index_of(struct elist *list, void *item)
 {
     if (list == NULL) {
@@ -242,6 +311,13 @@ ssize_t elist_index_of(struct elist *list, void *item)
     return -1;
 }
 
+/**
+* @brief		To sort the elist.
+* @details	    To sort the elist with the given comparator.
+* @param[in]	list The elist we want to sort.
+* @param[in]    comparator The comparator function we use in sorting.
+* @return	    None.
+*/
 void elist_sort(struct elist *list, int (*comparator)(const void *, const void *))
 {
 
@@ -279,5 +355,4 @@ bool idx_is_valid(struct elist *list, size_t idx)
             return true;
         }
     }
-    return false;
 }
