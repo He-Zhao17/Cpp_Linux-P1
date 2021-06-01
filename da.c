@@ -9,6 +9,7 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include "elist.h"
+#include "util.h"
 
 #include "logger.h"
 
@@ -54,6 +55,17 @@ void tDir(struct elist* list, char* path) {
     closedir(dir);
 }
 
+int cmptf(const void *a, const void *b) {
+    struct f* sa = (struct f*) a;
+    struct f* sb = (struct f*) b;
+    return sb->accTime - sa->accTime;
+}
+
+int cmpsf(const void *a, const void *b) {
+    struct f* sa = (struct f*) a;
+    struct f* sb = (struct f*) b;
+    return sb->size - sa->size;
+}
 
 void print_usage(char *argv[]) {
 fprintf(stderr, "Disk Analyzer (da): analyzes disk space usage\n");
@@ -156,10 +168,29 @@ int main(int argc, char *argv[])
             cols = win_sz.ws_col;
         }
         LOG("Display columns: %d\n", cols);
-
-
-
-
+        if (options.sort_by_time) {
+            elist_sort(list,cmptf);
+        } else {
+            elist_sort(list,cmpsf);
+        }
+        int widPath = 80 - 29;
+        for (int i = 0; i < options.limit; i++) {
+            struct f* temp = (struct f*) elist_get(list, i);
+            char *p = (char*) malloc (widPath + 1);
+            if (strlen(temp->path) > widPath) {
+                snprintf(p, widPath, "...%s", strlen(temp->path) - widPath + 4 + temp->path);
+            } else {
+                for (int j = 0; j < widPath - strlen(temp->path); j++) {
+                    snprintf(p + j, 1, " ");
+                }
+                snprintf(p + widPath - strlen(temp->path), strlen(temp->path), "%s",temp->path);
+            }
+            char *s = (char*) malloc (15);
+            human_readable_size(s, 14, (double) temp->size, 1);
+            char *at = (char*) malloc (16);
+            simple_time_format(at, 15, temp->accTime);
+            fprintf(stderr, "%s%s%s", p, s, at);
+        }
     }
 
 
